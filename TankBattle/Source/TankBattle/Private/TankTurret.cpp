@@ -7,7 +7,7 @@
 void UTankTurret::ChangeAzimuth(float RelativeSpeed)
 {
 	//move the turret the right amount 
-	auto Speed = FMath::Clamp<float>(RelativeSpeed, MinRelativeSpeed, MaxRelativeSpeed);
+	auto Speed = FMath::Clamp<float>(RelativeSpeed, -1, 1);
 
 	auto AzimuthChange = Speed * MaxDegreesPerSecond * GetWorld()->DeltaTimeSeconds;
 	auto NewAzimuth = RelativeRotation.Yaw + AzimuthChange;
