@@ -6,13 +6,23 @@
 #include "TankPlayerController.generated.h"
 
 class ATank;
+class UTankAimingComponent;
+
+/**
+* Responsible for helping the player aim
+*/
 
 UCLASS()
 class TANKBATTLE_API ATankPlayerController : public APlayerController
 {
 	GENERATED_BODY()
-	
-public:
+
+protected:
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+	ATank* GetControlledTank() const;
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
+	void FoundAimingComponent(UTankAimingComponent* AimCompRef);
 
 private:
 	UPROPERTY(EditDefaultsOnly)
@@ -26,8 +36,6 @@ private:
 
 	virtual void BeginPlay() override;
 	void virtual Tick(float DeltaSeconds) override;
-
-	ATank* GetControlledTank() const;
 
 	// move tank barrel so a shot hits where the crosshair intersects world
 	void AimTowardsCrosshair();
