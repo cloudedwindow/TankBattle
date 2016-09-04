@@ -1,23 +1,17 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankBattle.h"
-#include "Tank.h"
 #include "TankAimingComponent.h"
 #include "TankPlayerController.h"
 
 void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	auto AimingComponent = GetControlledTank()->FindComponentByClass<UTankAimingComponent>();
-	if (ensure(AimingComponent))
-	{
-		FoundAimingComponent(AimingComponent);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("No aiming component found!"));
-	}
+	auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+	if (!ensure(AimingComponent)) { return; }
+	FoundAimingComponent(AimingComponent);
 }
+
 
 void ATankPlayerController::Tick(float DeltaTime)
 {
@@ -25,27 +19,20 @@ void ATankPlayerController::Tick(float DeltaTime)
 	AimTowardsCrosshair();
 }
 
-
-ATank* ATankPlayerController::GetControlledTank() const
-{
-	return Cast<ATank>(GetPawn());
-}
-
 void ATankPlayerController::AimTowardsCrosshair()
 {
-	if (!ensure(GetControlledTank())) { return; }
-	
+	if (!GetPawn()) { return; }
+	auto TankAimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+	if (!ensure(TankAimingComponent)) { return; }
+
 	FVector HitLocation; // OUT parameter
 
 	if (GetSightRayHitLocation(HitLocation))
 	{
-		GetControlledTank()->AimAt(HitLocation);
-	}
-	else
-	{
-		return;
+		TankAimingComponent->AimAt(HitLocation);
 	}
 }
+
 
 bool ATankPlayerController::GetSightRayHitLocation(FVector& HitLocation) const // side-effect does a line trace
 {
@@ -59,13 +46,13 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& HitLocation) const /
 	if (GetLookDirection(ScreenLocation, LookDirection))
 	{
 		// line-trace along LookDirection and see what we hit
-		GetLookVectorHitLocation(LookDirection, HitLocation);
+		return GetLookVectorHitLocation(LookDirection, HitLocation);
 	}
-	return true;
+	return false;
 }
 
 
-bool ATankPlayerController::GetLookDirection(FVector2D& ScreenLocation, FVector& LookDirection) const
+bool ATankPlayerController::GetLookDirection(FVector2D ScreenLocation, FVector& LookDirection) const
 {
 	FVector CameraWorldLocation; // To be discarded
 	// de-project screen position of crosshair to a world direction
@@ -73,7 +60,7 @@ bool ATankPlayerController::GetLookDirection(FVector2D& ScreenLocation, FVector&
 }
 
 
-bool ATankPlayerController::GetLookVectorHitLocation(FVector& LookDirection, FVector& HitLocation) const
+bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection, FVector& HitLocation) const
 {
 	FHitResult HitResult;
 	FVector StartLocation = PlayerCameraManager->GetCameraLocation();
@@ -89,9 +76,6 @@ bool ATankPlayerController::GetLookVectorHitLocation(FVector& LookDirection, FVe
 		HitLocation = HitResult.Location;
 		return true;
 	}
-	else
-	{
-		HitLocation = FVector(0);
-		return false;
-	}
+	HitLocation = FVector(0);
+	return false;
 }

@@ -5,18 +5,21 @@
 #include "AIController.h"
 #include "TankAIController.generated.h"
 
-class ATank;
-
+/**
+ * 
+ */
 UCLASS()
 class TANKBATTLE_API ATankAIController : public AAIController
 {
 	GENERATED_BODY()
 	
-public:
-	virtual void BeginPlay() override;
-	void virtual Tick(float DeltaSeconds) override;
+protected:
+	// How close can the AI tank get
+	UPROPERTY(EditDefaultsOnly, Category = "Pathfinding")
+	float AcceptanceRadius = 7000;
 
 private:
-	// how close can the AI Tank get
-	float AcceptanceRadius = 3000;
+	virtual void BeginPlay() override;
+
+	virtual void Tick(float DeltaSeconds) override;
 };
