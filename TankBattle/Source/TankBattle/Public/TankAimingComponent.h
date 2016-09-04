@@ -11,7 +11,8 @@ enum class EFireStatus : uint8
 {
 	Reloading,
 	Aiming,
-	Locked
+	Locked,
+	OutOfAmmo
 };
 
 // Forward Declaration
@@ -36,6 +37,9 @@ public:
 
 	EFireStatus GetFireStatus() const;
 
+	UFUNCTION(BlueprintCallable, Category = "Firing")
+	int GetAmmoRemaining() const;
+
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "State")
 	EFireStatus FireStatus = EFireStatus::Reloading;
@@ -56,7 +60,7 @@ private:
 	UTankTurret* Turret = nullptr;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
-	float LaunchSpeed = 5000;
+	float LaunchSpeed = 8000;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 	TSubclassOf<AProjectile> ProjectileBlueprint;
@@ -67,4 +71,6 @@ private:
 	double LastFireTime = 0;
 
 	FVector AimDirection;
+
+	int AmmoRemaining = 10;
 };
