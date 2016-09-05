@@ -54,7 +54,7 @@ EFireStatus UTankAimingComponent::GetFireStatus() const
 	return FireStatus;
 }
 
-int UTankAimingComponent::GetAmmoRemaining() const
+int32 UTankAimingComponent::GetAmmoRemaining() const
 {
 	return AmmoRemaining;
 }
@@ -64,7 +64,7 @@ bool UTankAimingComponent::IsBarrelMoving()
 {
 	if (!ensure(Barrel)) { return false; }
 	auto BarrelForward = Barrel->GetForwardVector();
-	return !BarrelForward.Equals(AimDirection, 0.15); // vectors are equal
+	return !BarrelForward.Equals(AimDirection, 0.1); // vectors are equal
 }
 
 void UTankAimingComponent::AimAt(FVector HitLocation)

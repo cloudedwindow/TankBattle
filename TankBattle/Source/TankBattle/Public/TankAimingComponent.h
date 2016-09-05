@@ -38,7 +38,7 @@ public:
 	EFireStatus GetFireStatus() const;
 
 	UFUNCTION(BlueprintCallable, Category = "Firing")
-	int GetAmmoRemaining() const;
+	int32 GetAmmoRemaining() const;
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "State")
@@ -72,5 +72,6 @@ private:
 
 	FVector AimDirection;
 
-	int AmmoRemaining = 10;
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+	int32 AmmoRemaining = 25;
 };
