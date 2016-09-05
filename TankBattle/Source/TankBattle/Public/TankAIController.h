@@ -16,7 +16,7 @@ class TANKBATTLE_API ATankAIController : public AAIController
 protected:
 	// How close can the AI tank get
 	UPROPERTY(EditDefaultsOnly, Category = "Pathfinding")
-	float AcceptanceRadius = 7000;
+	float AcceptanceRadius = 9000;
 
 private:
 	virtual void BeginPlay() override;

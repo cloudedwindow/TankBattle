@@ -12,10 +12,12 @@ class TANKBATTLE_API ATank : public APawn
 {
 	GENERATED_BODY()
 
+public:
 	// Sets default values for this pawn's properties
 	ATank();
 
-public:
+	virtual void BeginPlay() override;
+
 	virtual float TakeDamage (float DamageAmount, FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor* DamageCauser) override;
 
 	// Return current health as percentage of starting health between 0 and 1
@@ -29,5 +31,5 @@ private:
 	int32 StartingHealth = 100;
 
 	UPROPERTY(VisibleAnywhere, Category = "Health")
-	int32 CurrentHealth = StartingHealth;
+	int32 CurrentHealth;
 };
